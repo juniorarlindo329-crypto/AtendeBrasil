@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#080810">
+  <meta name="theme-color" content="#070912">
+
   <title>Painel | AtendeBrasil</title>
 
   <style>
@@ -13,85 +14,293 @@
       padding: 0;
     }
 
+    :root {
+      --bg: #070912;
+      --card: #10131d;
+      --card2: #151927;
+      --border: rgba(255,255,255,.08);
+      --text: #ffffff;
+      --muted: #9298a7;
+      --purple: #9b5cff;
+      --purple2: #6f35ff;
+      --green: #19e6a2;
+      --red: #ff5d77;
+    }
+
     body {
       min-height: 100vh;
       font-family: Arial, Helvetica, sans-serif;
-      color: #fff;
+      color: var(--text);
       background:
-        radial-gradient(circle at top, rgba(130, 50, 255, .22), transparent 35%),
-        #05070d;
-      padding-bottom: 90px;
+        radial-gradient(circle at 15% 0%, rgba(128,66,255,.22), transparent 30%),
+        radial-gradient(circle at 100% 25%, rgba(0,230,160,.08), transparent 25%),
+        var(--bg);
+      padding-bottom: 105px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 430px;
+      margin: auto;
+      min-height: 100vh;
     }
 
     .topo {
-      padding: 28px 20px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 20px 16px;
     }
 
-    .topo h1 {
-      font-size: 27px;
+    .marca h1 {
+      font-size: 25px;
+      letter-spacing: -1px;
     }
 
-    .topo h1 span {
-      color: #9c42ff;
+    .marca h1 span {
+      background: linear-gradient(90deg, var(--purple), var(--green));
+      -webkit-background-clip: text;
+      color: transparent;
     }
 
-    .topo p {
-      color: #9ca3af;
-      margin-top: 7px;
+    .marca p {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .perfil {
+      width: 44px;
+      height: 44px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, var(--purple2), var(--green));
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      box-shadow: 0 8px 30px rgba(121,64,255,.25);
     }
 
     .conteudo {
-      padding: 5px 20px;
+      padding: 5px 18px 25px;
     }
 
-    .status {
-      background: linear-gradient(135deg, #171724, #10141b);
-      border: 1px solid #292938;
+    .saudacao {
+      margin: 14px 2px 20px;
+    }
+
+    .saudacao small {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .saudacao h2 {
+      font-size: 26px;
+      margin-top: 5px;
+    }
+
+    .saudacao p {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 7px;
+      line-height: 1.5;
+    }
+
+    .status-principal {
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      padding: 21px;
+      margin-bottom: 18px;
+      background:
+        linear-gradient(135deg, rgba(128,66,255,.25), rgba(20,23,35,.96));
+      border: 1px solid rgba(162,100,255,.22);
+      box-shadow: 0 18px 50px rgba(0,0,0,.2);
+    }
+
+    .status-principal::after {
+      content: "";
+      position: absolute;
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: rgba(0,230,160,.08);
+      right: -45px;
+      top: -45px;
+    }
+
+    .status-topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .status-label {
+      color: #bbbfc9;
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    .badge {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      color: var(--green);
+      font-size: 12px;
+      background: rgba(25,230,162,.09);
+      padding: 7px 10px;
       border-radius: 20px;
-      padding: 20px;
-      margin-bottom: 22px;
     }
 
-    .status small {
-      color: #9ca3af;
-    }
-
-    .status h2 {
-      margin-top: 8px;
+    .status-principal h3 {
       font-size: 22px;
+      margin-top: 18px;
     }
 
-    .online {
-      color: #00e79c;
+    .status-principal p {
+      color: #a9afba;
+      font-size: 13px;
+      margin-top: 7px;
     }
 
-    .grid {
+    .resumo {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 13px;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .mini-card {
+      background: rgba(17,20,30,.9);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .mini-card span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .mini-card strong {
+      display: block;
+      font-size: 24px;
+      margin-top: 8px;
+    }
+
+    .mini-card small {
+      display: block;
+      margin-top: 5px;
+      color: var(--green);
+      font-size: 11px;
+    }
+
+    .titulo-secao {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 6px 2px 13px;
+    }
+
+    .titulo-secao h3 {
+      font-size: 17px;
+    }
+
+    .titulo-secao span {
+      color: var(--purple);
+      font-size: 12px;
+    }
+
+    .atalhos {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
     }
 
     .card {
-      min-height: 125px;
-      background: #11141c;
-      border: 1px solid #292d38;
-      border-radius: 18px;
-      padding: 18px;
+      min-height: 145px;
+      border-radius: 20px;
+      padding: 17px;
+      background:
+        linear-gradient(145deg, rgba(20,24,36,.98), rgba(12,15,23,.98));
+      border: 1px solid var(--border);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      text-decoration: none;
+      color: white;
+      transition: .2s;
+    }
+
+    .card:active {
+      transform: scale(.97);
     }
 
     .icone {
-      font-size: 28px;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: rgba(151,81,255,.12);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 22px;
     }
 
     .card strong {
-      font-size: 16px;
+      font-size: 15px;
     }
 
-    .card span {
-      color: #8f96a3;
+    .card p {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 5px;
+      line-height: 1.4;
+    }
+
+    .conexao {
+      margin-top: 22px;
+      border-radius: 21px;
+      padding: 18px;
+      background: #10131c;
+      border: 1px solid var(--border);
+    }
+
+    .conexao-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+
+    .conexao-item:last-child {
+      border-bottom: 0;
+    }
+
+    .conexao-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .conexao-info strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .conexao-info small {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .ok {
+      color: var(--green);
+      font-size: 12px;
+    }
+
+    .pendente {
+      color: #ffba5a;
       font-size: 12px;
     }
 
@@ -102,99 +311,242 @@
       transform: translateX(-50%);
       width: 100%;
       max-width: 430px;
-      display: flex;
-      justify-content: space-around;
-      padding: 15px 8px 20px;
-      background: rgba(8, 9, 15, .97);
-      border-top: 1px solid #272a35;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 10px 8px 18px;
+      background: rgba(8,10,16,.97);
+      backdrop-filter: blur(18px);
+      border-top: 1px solid rgba(255,255,255,.07);
+      z-index: 20;
     }
 
     .menu a {
-      color: #9ca3af;
       text-decoration: none;
-      font-size: 12px;
+      color: #777e8c;
       text-align: center;
+      font-size: 10px;
+      padding: 7px 0;
+    }
+
+    .menu a b {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 5px;
     }
 
     .menu .ativo {
-      color: #a855f7;
+      color: var(--purple);
     }
   </style>
 </head>
 
 <body>
 
-  <header class="topo">
-    <h1>Atende<span>Brasil</span></h1>
-    <p>Inteligência que atende por você.</p>
-  </header>
+  <div class="app">
 
-  <main class="conteudo">
-
-    <section class="status">
-      <small>STATUS DO SISTEMA</small>
-      <h2><span class="online">●</span> Atendimento ativo</h2>
-    </section>
-
-    <div class="grid">
-
-      <div class="card">
-        <div class="icone">💬</div>
-        <strong>Atendimentos</strong>
-        <span>Gerencie conversas</span>
+    <header class="topo">
+      <div class="marca">
+        <h1>Atende<span>Brasil</span></h1>
+        <p>Inteligência que atende por você.</p>
       </div>
 
-      <div class="card">
-        <div class="icone">👥</div>
-        <strong>Clientes</strong>
-        <span>Veja seus clientes</span>
+      <div class="perfil" id="perfil">A</div>
+    </header>
+
+    <main class="conteudo">
+
+      <section class="saudacao">
+        <small>PAINEL PRINCIPAL</small>
+        <h2>Olá 👋</h2>
+        <p>Acompanhe sua operação e gerencie seu atendimento em um só lugar.</p>
+      </section>
+
+      <section class="status-principal">
+        <div class="status-topo">
+          <span class="status-label">STATUS DO SISTEMA</span>
+
+          <span class="badge">
+            ● Online
+          </span>
+        </div>
+
+        <h3>Seu atendimento está ativo</h3>
+        <p>AtendeBrasil pronto para receber e organizar seus clientes.</p>
+      </section>
+
+      <section class="resumo">
+
+        <div class="mini-card">
+          <span>ATENDIMENTOS HOJE</span>
+          <strong>0</strong>
+          <small>● Sistema ativo</small>
+        </div>
+
+        <div class="mini-card">
+          <span>CLIENTES</span>
+          <strong>0</strong>
+          <small>Base de clientes</small>
+        </div>
+
+      </section>
+
+      <div class="titulo-secao">
+        <h3>Central de controle</h3>
+        <span>Gerenciar</span>
       </div>
 
-      <div class="card">
-        <div class="icone">📱</div>
-        <strong>WhatsApp</strong>
-        <span>Conectar número</span>
+      <section class="atalhos">
+
+        <a class="card" href="#">
+          <div class="icone">💬</div>
+          <div>
+            <strong>Atendimentos</strong>
+            <p>Visualize e acompanhe todas as conversas.</p>
+          </div>
+        </a>
+
+        <a class="card" href="#">
+          <div class="icone">👥</div>
+          <div>
+            <strong>Clientes</strong>
+            <p>Organize e gerencie sua base de clientes.</p>
+          </div>
+        </a>
+
+        <a class="card" href="#">
+          <div class="icone">📱</div>
+          <div>
+            <strong>WhatsApp</strong>
+            <p>Conecte e acompanhe seu número comercial.</p>
+          </div>
+        </a>
+
+        <a class="card" href="#">
+          <div class="icone">🤖</div>
+          <div>
+            <strong>Inteligência IA</strong>
+            <p>Configure seu assistente automático.</p>
+          </div>
+        </a>
+
+        <a class="card" href="#">
+          <div class="icone">📊</div>
+          <div>
+            <strong>Relatórios</strong>
+            <p>Acompanhe resultados e desempenho.</p>
+          </div>
+        </a>
+
+        <a class="card" href="#">
+          <div class="icone">⚙️</div>
+          <div>
+            <strong>Configurações</strong>
+            <p>Dados da empresa e preferências.</p>
+          </div>
+        </a>
+
+      </section>
+
+      <div class="titulo-secao" style="margin-top:25px;">
+        <h3>Conexões</h3>
       </div>
 
-      <div class="card">
-        <div class="icone">🤖</div>
-        <strong>Inteligência IA</strong>
-        <span>Configure seu assistente</span>
-      </div>
+      <section class="conexao">
 
-      <div class="card">
-        <div class="icone">📊</div>
-        <strong>Relatórios</strong>
-        <span>Acompanhe resultados</span>
-      </div>
+        <div class="conexao-item">
+          <div class="conexao-info">
+            <div>🔐</div>
+            <div>
+              <strong>Conta AtendeBrasil</strong>
+              <small>Login protegido</small>
+            </div>
+          </div>
 
-      <div class="card">
-        <div class="icone">⚙️</div>
-        <strong>Configurações</strong>
-        <span>Gerencie sua empresa</span>
-      </div>
+          <span class="ok">Ativo</span>
+        </div>
 
-    </div>
-  </main>
+        <div class="conexao-item">
+          <div class="conexao-info">
+            <div>📱</div>
+            <div>
+              <strong>WhatsApp Business</strong>
+              <small>Canal de atendimento</small>
+            </div>
+          </div>
 
-  <nav class="menu">
-    <a href="#" class="ativo">🏠<br>Início</a>
-    <a href="#">💬<br>Atendimentos</a>
-    <a href="#">👥<br>Clientes</a>
-    <a href="#" onclick="sair()">🚪<br>Sair</a>
-  </nav>
-<script>
-  const token = localStorage.getItem("atendebrasil_access_token");
+          <span class="pendente">Configurar</span>
+        </div>
 
-  if (!token) {
-    window.location.href = "index.html";
-  }
+        <div class="conexao-item">
+          <div class="conexao-info">
+            <div>🤖</div>
+            <div>
+              <strong>Assistente IA</strong>
+              <small>Automação inteligente</small>
+            </div>
+          </div>
 
-  function sair() {
-    localStorage.removeItem("atendebrasil_access_token");
-    localStorage.removeItem("atendebrasil_user");
-    window.location.href = "index.html";
-  }
-</script>
+          <span class="pendente">Configurar</span>
+        </div>
+
+      </section>
+
+    </main>
+
+    <nav class="menu">
+
+      <a href="painel.html" class="ativo">
+        <b>⌂</b>
+        Início
+      </a>
+
+      <a href="#">
+        <b>💬</b>
+        Atender
+      </a>
+
+      <a href="#">
+        <b>👥</b>
+        Clientes
+      </a>
+
+      <a href="#" onclick="sair()">
+        <b>🚪</b>
+        Sair
+      </a>
+
+    </nav>
+
+  </div>
+
+  <script>
+    const token = localStorage.getItem("atendebrasil_access_token");
+    const usuarioSalvo = localStorage.getItem("atendebrasil_user");
+
+    if (!token) {
+      window.location.href = "index.html";
+    }
+
+    if (usuarioSalvo) {
+      try {
+        const usuario = JSON.parse(usuarioSalvo);
+
+        if (usuario.email) {
+          document.getElementById("perfil").textContent =
+            usuario.email.charAt(0).toUpperCase();
+        }
+      } catch (erro) {
+        console.log("Usuário não identificado");
+      }
+    }
+
+    function sair() {
+      localStorage.removeItem("atendebrasil_access_token");
+      localStorage.removeItem("atendebrasil_user");
+
+      window.location.href = "index.html";
+    }
+  </script>
+
 </body>
-</html>
+  </html>
