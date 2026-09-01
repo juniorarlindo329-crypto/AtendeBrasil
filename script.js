@@ -47,3 +47,46 @@ form.addEventListener("submit", async function (event) {
     alert("Erro ao conectar. Tente novamente.");
   }
 });
+const criarConta = document.getElementById("criar-conta");
+
+criarConta.addEventListener("click", async function (event) {
+  event.preventDefault();
+
+  const email = document.getElementById("email").value.trim();
+  const senha = document.getElementById("senha").value.trim();
+
+  if (!email || !senha) {
+    alert("Digite seu e-mail e uma senha para criar sua conta.");
+    return;
+  }
+
+  try {
+    const resposta = await fetch(
+      `${SUPABASE_URL}/auth/v1/signup`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY
+        },
+        body: JSON.stringify({
+          email: email,
+          password: senha
+        })
+      }
+    );
+
+    const dados = await resposta.json();
+
+    if (!resposta.ok) {
+      alert(dados.msg || dados.message || "Não foi possível criar a conta.");
+      console.log(dados);
+      return;
+    }
+
+    alert("Conta criada! Confira seu e-mail para confirmar o cadastro.");
+  } catch (erro) {
+    console.error(erro);
+    alert("Erro ao criar conta. Tente novamente.");
+  }
+});
