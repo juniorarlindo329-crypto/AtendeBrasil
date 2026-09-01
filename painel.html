@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080810">
+  <title>Painel | AtendeBrasil</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #fff;
+      background:
+        radial-gradient(circle at top, rgba(130, 50, 255, .22), transparent 35%),
+        #05070d;
+      padding-bottom: 90px;
+    }
+
+    .topo {
+      padding: 28px 20px 20px;
+    }
+
+    .topo h1 {
+      font-size: 27px;
+    }
+
+    .topo h1 span {
+      color: #9c42ff;
+    }
+
+    .topo p {
+      color: #9ca3af;
+      margin-top: 7px;
+    }
+
+    .conteudo {
+      padding: 5px 20px;
+    }
+
+    .status {
+      background: linear-gradient(135deg, #171724, #10141b);
+      border: 1px solid #292938;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 22px;
+    }
+
+    .status small {
+      color: #9ca3af;
+    }
+
+    .status h2 {
+      margin-top: 8px;
+      font-size: 22px;
+    }
+
+    .online {
+      color: #00e79c;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 13px;
+    }
+
+    .card {
+      min-height: 125px;
+      background: #11141c;
+      border: 1px solid #292d38;
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .icone {
+      font-size: 28px;
+    }
+
+    .card strong {
+      font-size: 16px;
+    }
+
+    .card span {
+      color: #8f96a3;
+      font-size: 12px;
+    }
+
+    .menu {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      display: flex;
+      justify-content: space-around;
+      padding: 15px 8px 20px;
+      background: rgba(8, 9, 15, .97);
+      border-top: 1px solid #272a35;
+    }
+
+    .menu a {
+      color: #9ca3af;
+      text-decoration: none;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .menu .ativo {
+      color: #a855f7;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="topo">
+    <h1>Atende<span>Brasil</span></h1>
+    <p>Inteligência que atende por você.</p>
+  </header>
+
+  <main class="conteudo">
+
+    <section class="status">
+      <small>STATUS DO SISTEMA</small>
+      <h2><span class="online">●</span> Atendimento ativo</h2>
+    </section>
+
+    <div class="grid">
+
+      <div class="card">
+        <div class="icone">💬</div>
+        <strong>Atendimentos</strong>
+        <span>Gerencie conversas</span>
+      </div>
+
+      <div class="card">
+        <div class="icone">👥</div>
+        <strong>Clientes</strong>
+        <span>Veja seus clientes</span>
+      </div>
+
+      <div class="card">
+        <div class="icone">📱</div>
+        <strong>WhatsApp</strong>
+        <span>Conectar número</span>
+      </div>
+
+      <div class="card">
+        <div class="icone">🤖</div>
+        <strong>Inteligência IA</strong>
+        <span>Configure seu assistente</span>
+      </div>
+
+      <div class="card">
+        <div class="icone">📊</div>
+        <strong>Relatórios</strong>
+        <span>Acompanhe resultados</span>
+      </div>
+
+      <div class="card">
+        <div class="icone">⚙️</div>
+        <strong>Configurações</strong>
+        <span>Gerencie sua empresa</span>
+      </div>
+
+    </div>
+  </main>
+
+  <nav class="menu">
+    <a href="#" class="ativo">🏠<br>Início</a>
+    <a href="#">💬<br>Atendimentos</a>
+    <a href="#">👥<br>Clientes</a>
+    <a href="#">⚙️<br>Ajustes</a>
+  </nav>
+
+</body>
+</html>
