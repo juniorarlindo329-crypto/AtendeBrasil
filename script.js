@@ -42,6 +42,7 @@ form.addEventListener("submit", async function (event) {
     localStorage.setItem("atendebrasil_user", JSON.stringify(dados.user));
 
     alert("Login realizado com sucesso!");
+    window.location.href = "painel.html";
   } catch (erro) {
     console.error(erro);
     alert("Erro ao conectar. Tente novamente.");
