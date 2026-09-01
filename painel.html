@@ -181,8 +181,20 @@
     <a href="#" class="ativo">🏠<br>Início</a>
     <a href="#">💬<br>Atendimentos</a>
     <a href="#">👥<br>Clientes</a>
-    <a href="#">⚙️<br>Ajustes</a>
+    <a href="#" onclick="sair()">🚪<br>Sair</a>
   </nav>
+<script>
+  const token = localStorage.getItem("atendebrasil_access_token");
 
+  if (!token) {
+    window.location.href = "index.html";
+  }
+
+  function sair() {
+    localStorage.removeItem("atendebrasil_access_token");
+    localStorage.removeItem("atendebrasil_user");
+    window.location.href = "index.html";
+  }
+</script>
 </body>
 </html>
