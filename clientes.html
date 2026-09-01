@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#070912">
+
+  <title>Clientes | AtendeBrasil</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #070912;
+      --card: #10131d;
+      --card2: #151927;
+      --border: rgba(255,255,255,.08);
+      --text: #ffffff;
+      --muted: #9298a7;
+      --purple: #9b5cff;
+      --purple2: #6f35ff;
+      --green: #19e6a2;
+      --red: #ff5d77;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(128,66,255,.22), transparent 30%),
+        radial-gradient(circle at 100% 25%, rgba(0,230,160,.08), transparent 25%),
+        var(--bg);
+      padding-bottom: 105px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 430px;
+      margin: auto;
+      min-height: 100vh;
+    }
+
+    .topo {
+      padding: 22px 18px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .topo-esquerda {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .voltar {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #10131d;
+      color: white;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+
+    .titulo h1 {
+      font-size: 22px;
+    }
+
+    .titulo p {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 3px;
+    }
+
+    .logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(121,64,255,.25);
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .conteudo {
+      padding: 10px 18px 30px;
+    }
+
+    .cabecalho {
+      margin-top: 12px;
+      margin-bottom: 20px;
+    }
+
+    .cabecalho small {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    .cabecalho h2 {
+      font-size: 28px;
+      margin-top: 6px;
+    }
+
+    .cabecalho p {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 7px;
+      line-height: 1.5;
+    }
+
+    .resumo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .resumo-card {
+      background: linear-gradient(145deg, #151927, #0d1018);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 17px;
+    }
+
+    .resumo-card span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .resumo-card strong {
+      display: block;
+      font-size: 25px;
+      margin-top: 8px;
+    }
+
+    .resumo-card small {
+      display: block;
+      color: var(--green);
+      font-size: 10px;
+      margin-top: 5px;
+    }
+
+    .acoes {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .pesquisa {
+      flex: 1;
+      height: 50px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: #10131d;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 9px;
+    }
+
+    .pesquisa input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: white;
+      font-size: 13px;
+    }
+
+    .pesquisa input::placeholder {
+      color: #6f7685;
+    }
+
+    .novo {
+      width: 52px;
+      height: 50px;
+      border: 0;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--purple2), var(--purple));
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(111,53,255,.25);
+    }
+
+    .titulo-lista {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 4px 2px 12px;
+    }
+
+    .titulo-lista h3 {
+      font-size: 17px;
+    }
+
+    .titulo-lista span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .lista {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    .cliente {
+      background: linear-gradient(145deg, rgba(20,24,36,.98), rgba(12,15,23,.98));
+      border: 1px solid var(--border);
+      border-radius: 19px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      min-width: 46px;
+      width: 46px;
+      height: 46px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, rgba(155,92,255,.25), rgba(25,230,162,.16));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 17px;
+      color: white;
+    }
+
+    .cliente-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .cliente-info strong {
+      display: block;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cliente-info p {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 5px;
+    }
+
+    .cliente-info small {
+      display: block;
+      color: #747b89;
+      font-size: 10px;
+      margin-top: 4px;
+    }
+
+    .whatsapp {
+      width: 39px;
+      height: 39px;
+      border-radius: 13px;
+      border: 1px solid rgba(25,230,162,.18);
+      background: rgba(25,230,162,.08);
+      color: var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    .vazio {
+      padding: 40px 20px;
+      text-align: center;
+      background: #10131d;
+      border: 1px dashed rgba(255,255,255,.12);
+      border-radius: 20px;
+    }
+
+    .vazio div {
+      font-size: 34px;
+      margin-bottom: 12px;
+    }
+
+    .vazio strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .vazio p {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 7px;
+      line-height: 1.5;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.72);
+      backdrop-filter: blur(7px);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .modal.ativo {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 430px;
+      background: #10131d;
+      border-radius: 28px 28px 0 0;
+      border: 1px solid var(--border);
+      padding: 22px 18px 28px;
+    }
+
+    .modal-topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-topo h3 {
+      font-size: 20px;
+    }
+
+    .fechar {
+      border: 0;
+      background: #1a1e2a;
+      color: white;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      font-size: 17px;
+    }
+
+    .campo {
+      margin-bottom: 14px;
+    }
+
+    .campo label {
+      display: block;
+      color: #a7adba;
+      font-size: 11px;
+      margin-bottom: 7px;
+    }
+
+    .campo input {
+      width: 100%;
+      height: 50px;
+      border: 1px solid var(--border);
+      background: #080b12;
+      color: white;
+      outline: 0;
+      border-radius: 15px;
+      padding: 0 14px;
+      font-size: 13px;
+    }
+
+    .salvar {
+      width: 100%;
+      height: 52px;
+      border: 0;
+      border-radius: 16px;
+      margin-top: 6px;
+      color: white;
+      font-weight: bold;
+      background: linear-gradient(90deg, var(--purple2), var(--purple));
+      font-size: 14px;
+    }
+
+    .menu {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 10px 8px 18px;
+      background: rgba(8,10,16,.97);
+      backdrop-filter: blur(18px);
+      border-top: 1px solid rgba(255,255,255,.07);
+      z-index: 20;
+    }
+
+    .menu a {
+      text-decoration: none;
+      color: #777e8c;
+      text-align: center;
+      font-size: 10px;
+      padding: 7px 0;
+    }
+
+    .menu a b {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    .menu .ativo {
+      color: var(--purple);
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <header class="topo">
+
+    <div class="topo-esquerda">
+      <a href="painel.html" class="voltar">‹</a>
+
+      <div class="titulo">
+        <h1>Clientes</h1>
+        <p>Central de relacionamento</p>
+      </div>
+    </div>
+
+    <div class="logo">
+      <img
+        src="8e677106-9f51-4466-bee8-7f3edd203f42.png"
+        alt="AtendeBrasil"
+      >
+    </div>
+
+  </header>
+
+  <main class="conteudo">
+
+    <section class="cabecalho">
+      <small>GESTÃO DE CLIENTES</small>
+
+      <h2>Sua base de clientes</h2>
+
+      <p>
+        Consulte contatos, acompanhe relacionamentos
+        e mantenha seus clientes organizados.
+      </p>
+    </section>
+
+    <section class="resumo">
+
+      <div class="resumo-card">
+        <span>TOTAL DE CLIENTES</span>
+        <strong id="totalClientes">0</strong>
+        <small>Base cadastrada</small>
+      </div>
+
+      <div class="resumo-card">
+        <span>NOVOS</span>
+        <strong id="novosClientes">0</strong>
+        <small>Clientes recentes</small>
+      </div>
+
+    </section>
+
+    <section class="acoes">
+
+      <div class="pesquisa">
+        🔎
+        <input
+          type="text"
+          id="buscarCliente"
+          placeholder="Buscar cliente..."
+        >
+      </div>
+
+      <button class="novo" onclick="abrirModal()">+</button>
+
+    </section>
+
+    <div class="titulo-lista">
+      <h3>Clientes</h3>
+      <span id="contadorLista">0 cadastrados</span>
+    </div>
+
+    <section class="lista" id="listaClientes"></section>
+
+  </main>
+
+  <nav class="menu">
+
+    <a href="painel.html">
+      <b>⌂</b>
+      Início
+    </a>
+
+    <a href="#">
+      <b>💬</b>
+      Atender
+    </a>
+
+    <a href="clientes.html" class="ativo">
+      <b>👥</b>
+      Clientes
+    </a>
+
+    <a href="#" onclick="sair()">
+      <b>🚪</b>
+      Sair
+    </a>
+
+  </nav>
+
+</div>
+
+
+<div class="modal" id="modalCliente">
+
+  <div class="modal-box">
+
+    <div class="modal-topo">
+      <h3>Novo cliente</h3>
+
+      <button class="fechar" onclick="fecharModal()">✕</button>
+    </div>
+
+    <div class="campo">
+      <label>Nome do cliente</label>
+
+      <input
+        type="text"
+        id="nomeCliente"
+        placeholder="Nome completo"
+      >
+    </div>
+
+    <div class="campo">
+      <label>Telefone / WhatsApp</label>
+
+      <input
+        type="tel"
+        id="telefoneCliente"
+        placeholder="(00) 00000-0000"
+      >
+    </div>
+
+    <div class="campo">
+      <label>E-mail</label>
+
+      <input
+        type="email"
+        id="emailCliente"
+        placeholder="cliente@email.com"
+      >
+    </div>
+
+    <button class="salvar" onclick="salvarCliente()">
+      Salvar cliente
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const token = localStorage.getItem("atendebrasil_access_token");
+
+if (!token) {
+  window.location.href = "index.html";
+}
+
+
+let clientes =
+  JSON.parse(localStorage.getItem("atendebrasil_clientes")) || [];
+
+
+function salvarBanco() {
+  localStorage.setItem(
+    "atendebrasil_clientes",
+    JSON.stringify(clientes)
+  );
+}
+
+
+function abrirModal() {
+  document
+    .getElementById("modalCliente")
+    .classList.add("ativo");
+}
+
+
+function fecharModal() {
+  document
+    .getElementById("modalCliente")
+    .classList.remove("ativo");
+}
+
+
+function salvarCliente() {
+
+  const nome =
+    document.getElementById("nomeCliente").value.trim();
+
+  const telefone =
+    document.getElementById("telefoneCliente").value.trim();
+
+  const email =
+    document.getElementById("emailCliente").value.trim();
+
+
+  if (!nome || !telefone) {
+    alert("Informe o nome e o telefone do cliente.");
+    return;
+  }
+
+
+  const cliente = {
+    id: Date.now(),
+    nome: nome,
+    telefone: telefone,
+    email: email,
+    criadoEm: new Date().toLocaleDateString("pt-BR")
+  };
+
+
+  clientes.unshift(cliente);
+
+  salvarBanco();
+
+  document.getElementById("nomeCliente").value = "";
+  document.getElementById("telefoneCliente").value = "";
+  document.getElementById("emailCliente").value = "";
+
+  fecharModal();
+
+  renderizarClientes();
+
+  alert("Cliente cadastrado com sucesso!");
+}
+
+
+function somenteNumeros(valor) {
+  return valor.replace(/\D/g, "");
+}
+
+
+function renderizarClientes(filtro = "") {
+
+  const lista = document.getElementById("listaClientes");
+
+  lista.innerHTML = "";
+
+
+  const resultado = clientes.filter(cliente => {
+
+    const texto =
+      (
+        cliente.nome +
+        " " +
+        cliente.telefone +
+        " " +
+        cliente.email
+      ).toLowerCase();
+
+    return texto.includes(filtro.toLowerCase());
+
+  });
+
+
+  document.getElementById("totalClientes").textContent =
+    clientes.length;
+
+  document.getElementById("novosClientes").textContent =
+    clientes.length;
+
+  document.getElementById("contadorLista").textContent =
+    resultado.length + " cadastrados";
+
+
+  if (resultado.length === 0) {
+
+    lista.innerHTML = `
+      <div class="vazio">
+        <div>👥</div>
+
+        <strong>Nenhum cliente encontrado</strong>
+
+        <p>
+          Toque no botão + para cadastrar
+          seu primeiro cliente.
+        </p>
+      </div>
+    `;
+
+    return;
+  }
+
+
+  resultado.forEach(cliente => {
+
+    const primeiraLetra =
+      cliente.nome.charAt(0).toUpperCase();
+
+    const telefoneWhatsApp =
+      somenteNumeros(cliente.telefone);
+
+
+    const card = document.createElement("div");
+
+    card.className = "cliente";
+
+
+    card.innerHTML = `
+
+      <div class="avatar">
+        ${primeiraLetra}
+      </div>
+
+      <div class="cliente-info">
+
+        <strong>${cliente.nome}</strong>
+
+        <p>${cliente.telefone}</p>
+
+        <small>
+          ${cliente.email || "Sem e-mail cadastrado"}
+        </small>
+
+      </div>
+
+      <a
+        class="whatsapp"
+        href="https://wa.me/55${telefoneWhatsApp}"
+        target="_blank"
+      >
+        💬
+      </a>
+
+    `;
+
+
+    lista.appendChild(card);
+
+  });
+
+}
+
+
+document
+  .getElementById("buscarCliente")
+  .addEventListener("input", function () {
+
+    renderizarClientes(this.value);
+
+  });
+
+
+function sair() {
+
+  localStorage.removeItem("atendebrasil_access_token");
+  localStorage.removeItem("atendebrasil_user");
+
+  window.location.href = "index.html";
+
+}
+
+
+renderizarClientes();
+
+</script>
+
+</body>
+  </html>
