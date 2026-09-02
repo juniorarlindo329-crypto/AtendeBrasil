@@ -582,9 +582,14 @@
 const SUPABASE_URL = "https://akpxaidlraaaqnyfpxch.supabase.co";
 const SUPABASE_KEY = "sb_publishable_0gG5QKCtNgdK2JPsYbgk8A_korwv297";
 
-const token = localStorage.getItem("atendebrasil_access_token");
+let token = localStorage.getItem("atendebrasil_access_token");
 
 if (!token) {
+  token = sessionStorage.getItem("atendebrasil_access_token");
+}
+
+if (!token) {
+  alert("Sua sessão não foi encontrada. Faça login novamente.");
   window.location.href = "index.html";
 }
 
