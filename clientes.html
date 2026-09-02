@@ -579,6 +579,8 @@
 
 
 <script>
+const SUPABASE_URL = "https://akpxaidlraaaqnyfpxch.supabase.co";
+const SUPABASE_KEY = "sb_publishable_0gG5QKCtNgdK2JPsYbgk8A_korwv297";
 
 const token = localStorage.getItem("atendebrasil_access_token");
 
@@ -586,116 +588,193 @@ if (!token) {
   window.location.href = "index.html";
 }
 
+let clientes = [];
 
-let clientes =
-  JSON.parse(localStorage.getItem("atendebrasil_clientes")) || [];
-
-
-function salvarBanco() {
-  localStorage.setItem(
-    "atendebrasil_clientes",
-    JSON.stringify(clientes)
-  );
+function headersSupabase() {
+  return {
+    "Content-Type": "application/json",
+    "apikey": SUPABASE_KEY,
+    "Authorization": `Bearer ${token}`
+  };
 }
-
 
 function abrirModal() {
-  document
-    .getElementById("modalCliente")
-    .classList.add("ativo");
+  document.getElementById("modalCliente").classList.add("ativo");
 }
-
 
 function fecharModal() {
-  document
-    .getElementById("modalCliente")
-    .classList.remove("ativo");
+  document.getElementById("modalCliente").classList.remove("ativo");
 }
 
+async function carregarClientes() {
+  try {
+    const resposta = await fetch(
+      `${SUPABASE_URL}/rest/v1/clientes?select=*&order=criado_em.desc`,
+      {
+        method: "GET",
+        headers: headersSupabase()
+      }
+    );
 
-function salvarCliente() {
+    if (resposta.status === 401) {
+      sair();
+      return;
+    }
 
-  const nome =
-    document.getElementById("nomeCliente").value.trim();
+    if (!resposta.ok) {
+      const erro = await resposta.text();
+      console.error("Erro Supabase:", erro);
+      alert("Não foi possível carregar os clientes.");
+      return;
+    }
 
-  const telefone =
-    document.getElementById("telefoneCliente").value.trim();
+    clientes = await resposta.json();
 
-  const email =
-    document.getElementById("emailCliente").value.trim();
+    renderizarClientes();
 
+  } catch (erro) {
+    console.error(erro);
+    alert("Erro ao conectar com o banco de dados.");
+  }
+}
+
+async function salvarCliente() {
+  const nome = document
+    .getElementById("nomeCliente")
+    .value
+    .trim();
+
+  const telefone = document
+    .getElementById("telefoneCliente")
+    .value
+    .trim();
+
+  const email = document
+    .getElementById("emailCliente")
+    .value
+    .trim();
 
   if (!nome || !telefone) {
     alert("Informe o nome e o telefone do cliente.");
     return;
   }
 
+  try {
+    const resposta = await fetch(
+      `${SUPABASE_URL}/rest/v1/clientes`,
+      {
+        method: "POST",
 
-  const cliente = {
-    id: Date.now(),
-    nome: nome,
-    telefone: telefone,
-    email: email,
-    criadoEm: new Date().toLocaleDateString("pt-BR")
-  };
+        headers: {
+          ...headersSupabase(),
+          "Prefer": "return=representation"
+        },
 
+        body: JSON.stringify({
+          nome: nome,
+          telefone: telefone,
+          email: email || null
+        })
+      }
+    );
 
-  clientes.unshift(cliente);
+    if (resposta.status === 401) {
+      sair();
+      return;
+    }
 
-  salvarBanco();
+    if (!resposta.ok) {
+      const erro = await resposta.text();
 
-  document.getElementById("nomeCliente").value = "";
-  document.getElementById("telefoneCliente").value = "";
-  document.getElementById("emailCliente").value = "";
+      console.error("Erro ao cadastrar:", erro);
 
-  fecharModal();
+      alert("Não foi possível cadastrar o cliente.");
+      return;
+    }
 
-  renderizarClientes();
+    document.getElementById("nomeCliente").value = "";
+    document.getElementById("telefoneCliente").value = "";
+    document.getElementById("emailCliente").value = "";
 
-  alert("Cliente cadastrado com sucesso!");
+    fecharModal();
+
+    await carregarClientes();
+
+    alert("Cliente cadastrado com sucesso!");
+
+  } catch (erro) {
+    console.error(erro);
+
+    alert("Erro ao cadastrar cliente. Tente novamente.");
+  }
 }
-
 
 function somenteNumeros(valor) {
-  return valor.replace(/\D/g, "");
+  return String(valor || "").replace(/\D/g, "");
 }
 
+function numeroWhatsApp(valor) {
+  let numero = somenteNumeros(valor);
+
+  if (!numero.startsWith("55")) {
+    numero = "55" + numero;
+  }
+
+  return numero;
+}
+
+function escaparTexto(valor) {
+  return String(valor || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function contarNovos() {
+  const seteDiasAtras = new Date();
+
+  seteDiasAtras.setDate(
+    seteDiasAtras.getDate() - 7
+  );
+
+  return clientes.filter(cliente => {
+    if (!cliente.criado_em) {
+      return false;
+    }
+
+    return new Date(cliente.criado_em) >= seteDiasAtras;
+  }).length;
+}
 
 function renderizarClientes(filtro = "") {
-
   const lista = document.getElementById("listaClientes");
 
   lista.innerHTML = "";
 
-
   const resultado = clientes.filter(cliente => {
+    const texto = `
+      ${cliente.nome || ""}
+      ${cliente.telefone || ""}
+      ${cliente.email || ""}
+    `.toLowerCase();
 
-    const texto =
-      (
-        cliente.nome +
-        " " +
-        cliente.telefone +
-        " " +
-        cliente.email
-      ).toLowerCase();
-
-    return texto.includes(filtro.toLowerCase());
-
+    return texto.includes(
+      filtro.toLowerCase()
+    );
   });
-
 
   document.getElementById("totalClientes").textContent =
     clientes.length;
 
   document.getElementById("novosClientes").textContent =
-    clientes.length;
+    contarNovos();
 
   document.getElementById("contadorLista").textContent =
     resultado.length + " cadastrados";
 
-
   if (resultado.length === 0) {
-
     lista.innerHTML = `
       <div class="vazio">
         <div>👥</div>
@@ -712,78 +791,87 @@ function renderizarClientes(filtro = "") {
     return;
   }
 
-
   resultado.forEach(cliente => {
+    const nomeSeguro =
+      escaparTexto(cliente.nome);
+
+    const telefoneSeguro =
+      escaparTexto(cliente.telefone);
+
+    const emailSeguro =
+      escaparTexto(
+        cliente.email ||
+        "Sem e-mail cadastrado"
+      );
 
     const primeiraLetra =
-      cliente.nome.charAt(0).toUpperCase();
+      nomeSeguro.charAt(0).toUpperCase();
 
-    const telefoneWhatsApp =
-      somenteNumeros(cliente.telefone);
+    const whatsapp =
+      numeroWhatsApp(cliente.telefone);
 
-
-    const card = document.createElement("div");
+    const card =
+      document.createElement("div");
 
     card.className = "cliente";
 
-
     card.innerHTML = `
-
       <div class="avatar">
         ${primeiraLetra}
       </div>
 
       <div class="cliente-info">
 
-        <strong>${cliente.nome}</strong>
+        <strong>
+          ${nomeSeguro}
+        </strong>
 
-        <p>${cliente.telefone}</p>
+        <p>
+          ${telefoneSeguro}
+        </p>
 
         <small>
-          ${cliente.email || "Sem e-mail cadastrado"}
+          ${emailSeguro}
         </small>
 
       </div>
 
       <a
         class="whatsapp"
-        href="https://wa.me/55${telefoneWhatsApp}"
+        href="https://wa.me/${whatsapp}"
         target="_blank"
+        rel="noopener noreferrer"
       >
         💬
       </a>
-
     `;
 
-
     lista.appendChild(card);
-
   });
-
 }
-
 
 document
   .getElementById("buscarCliente")
-  .addEventListener("input", function () {
-
-    renderizarClientes(this.value);
-
-  });
-
+  .addEventListener(
+    "input",
+    function () {
+      renderizarClientes(this.value);
+    }
+  );
 
 function sair() {
+  localStorage.removeItem(
+    "atendebrasil_access_token"
+  );
 
-  localStorage.removeItem("atendebrasil_access_token");
-  localStorage.removeItem("atendebrasil_user");
+  localStorage.removeItem(
+    "atendebrasil_user"
+  );
 
   window.location.href = "index.html";
-
 }
 
-
-renderizarClientes();
-
+carregarClientes();
 </script>
 
 </body>
