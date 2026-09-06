@@ -1,13 +1,17 @@
-# AtendeBrasil 1.2.0
+# AtendeBrasil — versão 1.3.0
 
-Pacote completo atualizado.
+Pacote completo de correção de autenticação.
 
-Correções:
-- remove redirecionamento automático do index;
-- valida o access token diretamente no Supabase;
-- tenta refresh somente quando necessário;
-- limpa sessão inválida para impedir loop index/painel;
-- mantém Painel e Clientes usando a mesma sessão;
-- mantém integração com public.clientes e RLS.
+Principais ajustes:
+- login refeito e isolado;
+- limpa sessão antiga antes de salvar uma nova;
+- mantém access_token e refresh_token;
+- recuperação de senha refeita;
+- erros reais do Supabase passam a ser mostrados na tela;
+- sem redirecionamento automático no index, evitando loop;
+- painel e clientes continuam protegidos pela validação de sessão.
 
-Substitua os arquivos antigos pelos arquivos deste pacote e publique pela branch main /(root).
+Substitua TODOS os arquivos antigos pelos arquivos deste pacote.
+
+IMPORTANTE: a chave presente em config.js é a chave pública/publishable do frontend.
+Nunca coloque Secret key/service_role, chave OpenAI ou token permanente da Meta em GitHub Pages.
