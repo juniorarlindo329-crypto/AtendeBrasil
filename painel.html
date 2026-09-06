@@ -1,30 +1,16 @@
-<!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Painel | AtendeBrasil</title><link rel="stylesheet" href="style.css"></head>
-<body><div class="app">
-<header class="topo"><div class="marca"><h1>Atende<span>Brasil</span></h1><p>Inteligência que atende por você.</p></div><div class="perfil"><img src="https://raw.githubusercontent.com/juniorarlindo329-crypto/AtendeBrasil/refs/heads/main/8e677106-9f51-4466-bee8-7f3edd203f42.png"></div></header>
-<main>
-<section class="saudacao"><small>PAINEL DA EMPRESA</small><h2 id="ola">Olá 👋</h2><p>Gerencie seus clientes e prepare sua operação para a IA.</p></section>
-<section class="status-principal"><span class="badge">● Online</span><h3>Seu painel está pronto</h3><p>Sessão verificada diretamente no Supabase.</p></section>
-<section class="resumo"><div class="mini-card"><span>CLIENTES</span><strong id="totalClientesPainel">—</strong><small>Base cadastrada</small></div><div class="mini-card"><span>ATENDIMENTOS</span><strong>0</strong><small>Em breve</small></div></section>
-<section class="atalhos">
-<a class="card" href="clientes.html"><div class="icone">👥</div><strong>Clientes</strong><p>Cadastre e consulte sua base.</p></a>
-<a class="card" href="#"><div class="icone">💬</div><strong>Atendimentos</strong><p>Área de conversas.</p></a>
-<a class="card" href="#"><div class="icone">🤖</div><strong>Minha IA</strong><p>Configuração da IA.</p></a>
-<a class="card" href="#"><div class="icone">📊</div><strong>Relatórios</strong><p>Resultados e desempenho.</p></a>
-</section>
-</main>
-<nav class="menu"><a class="ativo" href="painel.html"><b>⌂</b>Início</a><a href="#"><b>💬</b>Atender</a><a href="clientes.html"><b>👥</b>Clientes</a><a href="#" id="sairBtn"><b>🚪</b>Sair</a></nav>
-</div>
-<script src="config.js"></script><script src="session.js"></script>
-<script>
-(async()=>{
-  const S=window.AtendeSession,C=window.ATENDE_CONFIG;
-  if(!(await S.requireAuth())) return;
-  const user=S.getUser();
-  if(user?.email) document.getElementById("ola").textContent="Olá, "+user.email.split("@")[0]+" 👋";
-  const r=await S.authFetch(`${C.SUPABASE_URL}/rest/v1/clientes?select=id`,{method:"GET"});
-  if(r?.authExpired){window.location.replace("index.html");return;}
-  if(r?.ok){const data=await r.json();document.getElementById("totalClientesPainel").textContent=data.length;}
-  document.getElementById("sairBtn").addEventListener("click",e=>{e.preventDefault();S.clearSession();window.location.replace("index.html");});
-})();
-</script></body></html>
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Painel | AtendeBrasil</title><link rel="stylesheet" href="style.css"></head><body>
+<div class="app"><header class="topo"><div class="marca"><h1>Atende<span>Brasil</span></h1><p>Inteligência que atende por você.</p></div><img class="logo-mini" src="https://raw.githubusercontent.com/juniorarlindo329-crypto/AtendeBrasil/refs/heads/main/8e677106-9f51-4466-bee8-7f3edd203f42.png"></header>
+<section class="hero"><small>PAINEL DA EMPRESA</small><h2 id="hello">Olá 👋</h2><p>Gerencie clientes, atendimentos, sua IA e relatórios em um só lugar.</p></section>
+<section class="status"><span class="online">● Online</span><h3>Seu painel está pronto</h3><p>Login e sessão conectados ao Supabase.</p></section>
+<section class="stats"><div class="stat"><span>CLIENTES</span><strong id="totalClientes">0</strong><small>Base cadastrada</small></div><div class="stat"><span>ATENDIMENTOS</span><strong id="totalAtendimentos">0</strong><small>Registrados</small></div></section>
+<div class="section-title"><h3>Gerenciar</h3><span>Todos os botões ativos</span></div>
+<section class="grid">
+<a class="nav-card" href="clientes.html"><div class="icon">👥</div><div><strong>Clientes</strong><p>Cadastre e consulte sua base.</p></div></a>
+<a class="nav-card" href="atendimentos.html"><div class="icon">💬</div><div><strong>Atendimentos</strong><p>Abra e gerencie conversas.</p></div></a>
+<a class="nav-card" href="ia.html"><div class="icon">🤖</div><div><strong>Minha IA</strong><p>Configure o comportamento da IA.</p></div></a>
+<a class="nav-card" href="relatorios.html"><div class="icon">📊</div><div><strong>Relatórios</strong><p>Acompanhe seus resultados.</p></div></a>
+<a class="nav-card" href="configuracoes.html"><div class="icon">⚙️</div><div><strong>Configurações</strong><p>Dados e preferências do app.</p></div></a>
+<a class="nav-card" href="#" data-logout><div class="icon">🚪</div><div><strong>Sair</strong><p>Encerrar a sessão com segurança.</p></div></a>
+</section></div><nav class="menu"><a href="painel.html" class="active"><b>⌂</b>Início</a><a href="atendimentos.html" class=""><b>💬</b>Atender</a><a href="clientes.html" class=""><b>👥</b>Clientes</a><a href="ia.html" class=""><b>🤖</b>Minha IA</a><a href="relatorios.html" class=""><b>📊</b>Relatórios</a></nav>
+<script src="config.js"></script><script src="session.js"></script><script src="app.js"></script>
+<script>(async()=>{if(!(await AtendeUI.protect()))return;document.getElementById("hello").textContent="Olá, "+AtendeUI.userName()+" 👋";const r=await AtendeSession.authFetch(`${ATENDE_CONFIG.SUPABASE_URL}/rest/v1/clientes?select=id`,{method:"GET"});if(r?.ok){const d=await r.json();document.getElementById("totalClientes").textContent=d.length;}const at=JSON.parse(localStorage.getItem("atendebrasil_atendimentos")||"[]");document.getElementById("totalAtendimentos").textContent=at.length;})();</script></body></html>

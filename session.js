@@ -22,8 +22,7 @@
   }
 
   function getUser(){
-    try { return JSON.parse(localStorage.getItem(USER) || "null"); }
-    catch { return null; }
+    try{return JSON.parse(localStorage.getItem(USER)||"null")}catch{return null}
   }
 
   async function refreshSession(){
@@ -33,7 +32,10 @@
     try{
       const r = await fetch(`${C.SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`,{
         method:"POST",
-        headers:{"Content-Type":"application/json","apikey":C.SUPABASE_KEY},
+        headers:{
+          "Content-Type":"application/json",
+          "apikey":C.SUPABASE_KEY
+        },
         body:JSON.stringify({refresh_token:refresh})
       });
 
@@ -43,7 +45,7 @@
       saveSession(data);
       return data.access_token;
     }catch(e){
-      console.error("Falha ao renovar sessão", e);
+      console.error(e);
       clearSession();
       return null;
     }
@@ -51,29 +53,28 @@
 
   async function validateAccessToken(token){
     if(!token) return false;
-
     try{
       const r = await fetch(`${C.SUPABASE_URL}/auth/v1/user`,{
-        method:"GET",
         headers:{
           "apikey":C.SUPABASE_KEY,
           "Authorization":`Bearer ${token}`
         }
       });
-      return r.ok;
+      if(!r.ok) return false;
+      const user = await r.json();
+      if(user?.id) localStorage.setItem(USER, JSON.stringify(user));
+      return true;
     }catch(e){
-      console.error("Falha ao validar sessão", e);
+      console.error(e);
       return false;
     }
   }
 
   async function validToken(){
     let token = getAccessToken();
-
     if(token && await validateAccessToken(token)) return token;
 
     token = await refreshSession();
-
     if(token && await validateAccessToken(token)) return token;
 
     clearSession();
@@ -84,21 +85,21 @@
     let token = await validToken();
     if(!token) return {authExpired:true};
 
-    const doFetch = (jwt) => fetch(url,{
+    const run = jwt => fetch(url,{
       ...options,
       headers:{
         "apikey":C.SUPABASE_KEY,
         "Authorization":`Bearer ${jwt}`,
-        ...(options.headers || {})
+        ...(options.headers||{})
       }
     });
 
-    let r = await doFetch(token);
+    let r = await run(token);
 
-    if(r.status === 401){
+    if(r.status===401){
       token = await refreshSession();
-      if(!token){ clearSession(); return {authExpired:true}; }
-      r = await doFetch(token);
+      if(!token) return {authExpired:true};
+      r = await run(token);
     }
 
     return r;
@@ -113,8 +114,8 @@
     return true;
   }
 
-  window.AtendeSession = {
-    saveSession, clearSession, getAccessToken, getUser,
-    refreshSession, validToken, authFetch, requireAuth
+  window.AtendeSession={
+    saveSession,clearSession,getAccessToken,getUser,
+    refreshSession,validateAccessToken,validToken,authFetch,requireAuth
   };
 })();
