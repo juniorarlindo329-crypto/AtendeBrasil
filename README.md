@@ -1,17 +1,13 @@
-# AtendeBrasil — pacote atualizado
+# AtendeBrasil 1.2.0
 
-Versão 1.1.0 — Desenvolvido por JNR
+Pacote completo atualizado.
 
-Este pacote unifica o login, painel e clientes e corrige a sessão do Supabase usando access token + refresh token, com renovação automática antes de redirecionar para o login.
+Correções:
+- remove redirecionamento automático do index;
+- valida o access token diretamente no Supabase;
+- tenta refresh somente quando necessário;
+- limpa sessão inválida para impedir loop index/painel;
+- mantém Painel e Clientes usando a mesma sessão;
+- mantém integração com public.clientes e RLS.
 
-Arquivos:
-- index.html
-- painel.html
-- clientes.html
-- style.css
-- config.js
-- session.js
-- script.js
-
-Segurança:
-A Publishable Key do Supabase pode ser usada no navegador com RLS corretamente configurado. Nunca coloque Secret key/service_role, chave da OpenAI ou token permanente do WhatsApp/Meta nesses arquivos públicos.
+Substitua os arquivos antigos pelos arquivos deste pacote e publique pela branch main /(root).
