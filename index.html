@@ -3,89 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#080810">
-
+  <meta name="theme-color" content="#070912">
   <title>AtendeBrasil</title>
-
   <link rel="stylesheet" href="style.css">
 </head>
-
-<body>
-
-  <main class="app">
-
-    <section class="logo-area">
-      <img src="8e677106-9f51-4466-bee8-7f3edd203f42.png" alt="AtendeBrasil" class="logo">
-
+<body class="auth-page">
+  <main class="auth-shell">
+    <section class="brand">
+      <img src="https://raw.githubusercontent.com/juniorarlindo329-crypto/AtendeBrasil/refs/heads/main/8e677106-9f51-4466-bee8-7f3edd203f42.png" alt="AtendeBrasil" class="brand-logo">
       <h1>Atende<span>Brasil</span></h1>
-
-      <p>
-        Inteligência que atende por você.
-      </p>
+      <p>Inteligência que atende por você.</p>
     </section>
 
-    <section class="login">
+    <section class="auth-card">
+      <div id="loginBox">
+        <h2>Bem-vindo</h2>
+        <p class="muted">Entre na sua conta para continuar.</p>
 
-      <h2>Bem-vindo</h2>
+        <form id="loginForm">
+          <label for="email">E-mail</label>
+          <input id="email" type="email" autocomplete="email" placeholder="seuemail@empresa.com" required>
 
-      <p class="subtitle">
-        Entre na sua conta para continuar
-      </p>
+          <label for="senha">Senha</label>
+          <input id="senha" type="password" autocomplete="current-password" placeholder="Digite sua senha" required>
 
-      <form>
+          <button class="primary" type="submit">Entrar</button>
+        </form>
 
-        <label for="email">E-mail</label>
-
-        <input
-          type="email"
-          id="email"
-          placeholder="seuemail@empresa.com"
-          required
-        >
-
-        <label for="senha">Senha</label>
-
-        <input
-          type="password"
-          id="senha"
-          placeholder="Digite sua senha"
-          required
-        >
-
-        <a href="#" class="forgot">
-          Esqueci minha senha
-        </a>
-
-        <button type="submit">
-          Entrar
-        </button>
-
-      </form>
-
-      <div class="divider">
-        <span>ou</span>
+        <button class="link-btn" id="forgotBtn" type="button">Esqueci minha senha</button>
+        <p class="register">Ainda não tem uma conta? <button class="inline-link" id="showSignup" type="button">Criar conta</button></p>
       </div>
 
-      <button class="google">
-        Continuar com Google
-      </button>
+      <div id="signupBox" class="hidden">
+        <h2>Criar conta</h2>
+        <p class="muted">Cadastre sua empresa no AtendeBrasil.</p>
 
-      <p class="register">
-        Ainda não tem uma conta?
-        <a href="#" id="criar-conta">Criar conta</a>
-      </p>
+        <form id="signupForm">
+          <label for="signupEmail">E-mail</label>
+          <input id="signupEmail" type="email" autocomplete="email" required>
 
+          <label for="signupSenha">Senha</label>
+          <input id="signupSenha" type="password" minlength="6" autocomplete="new-password" required>
+
+          <button class="primary" type="submit">Criar conta</button>
+        </form>
+
+        <button class="link-btn" id="showLogin" type="button">Voltar para o login</button>
+      </div>
+
+      <div id="message" class="message hidden"></div>
     </section>
 
     <footer>
       <strong>AtendeBrasil</strong>
-      <span>Versão 1.0.0</span>
+      <span>Versão 1.1.0</span>
       <small>Desenvolvido por JNR</small>
     </footer>
-
   </main>
 
+  <script src="config.js"></script>
+  <script src="session.js"></script>
   <script src="script.js"></script>
-
 </body>
 </html>
