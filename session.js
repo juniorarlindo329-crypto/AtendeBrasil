@@ -3,18 +3,17 @@
   const ACCESS = "atendebrasil_access_token";
   const REFRESH = "atendebrasil_refresh_token";
   const USER = "atendebrasil_user";
-  const EXPIRES = "atendebrasil_expires_at";
 
   function saveSession(data){
     if(data.access_token) localStorage.setItem(ACCESS, data.access_token);
     if(data.refresh_token) localStorage.setItem(REFRESH, data.refresh_token);
     if(data.user) localStorage.setItem(USER, JSON.stringify(data.user));
-    const seconds = Number(data.expires_in || 3600);
-    localStorage.setItem(EXPIRES, String(Date.now() + Math.max(seconds - 60, 60) * 1000));
   }
 
   function clearSession(){
-    [ACCESS, REFRESH, USER, EXPIRES].forEach(k => localStorage.removeItem(k));
+    localStorage.removeItem(ACCESS);
+    localStorage.removeItem(REFRESH);
+    localStorage.removeItem(USER);
     sessionStorage.removeItem(ACCESS);
   }
 
@@ -29,10 +28,7 @@
 
   async function refreshSession(){
     const refresh = localStorage.getItem(REFRESH);
-    if(!refresh){
-      clearSession();
-      return null;
-    }
+    if(!refresh){ clearSession(); return null; }
 
     try{
       const r = await fetch(`${C.SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`,{
@@ -41,10 +37,7 @@
         body:JSON.stringify({refresh_token:refresh})
       });
 
-      if(!r.ok){
-        clearSession();
-        return null;
-      }
+      if(!r.ok){ clearSession(); return null; }
 
       const data = await r.json();
       saveSession(data);
@@ -56,44 +49,56 @@
     }
   }
 
+  async function validateAccessToken(token){
+    if(!token) return false;
+
+    try{
+      const r = await fetch(`${C.SUPABASE_URL}/auth/v1/user`,{
+        method:"GET",
+        headers:{
+          "apikey":C.SUPABASE_KEY,
+          "Authorization":`Bearer ${token}`
+        }
+      });
+      return r.ok;
+    }catch(e){
+      console.error("Falha ao validar sessão", e);
+      return false;
+    }
+  }
+
   async function validToken(){
     let token = getAccessToken();
-    const exp = Number(localStorage.getItem(EXPIRES) || 0);
 
-    if(!token) return await refreshSession();
+    if(token && await validateAccessToken(token)) return token;
 
-    if(exp && Date.now() >= exp){
-      token = await refreshSession();
-    }
+    token = await refreshSession();
 
-    return token;
+    if(token && await validateAccessToken(token)) return token;
+
+    clearSession();
+    return null;
   }
 
   async function authFetch(url, options={}){
     let token = await validToken();
-
     if(!token) return {authExpired:true};
 
-    const headers = {
-      "apikey": C.SUPABASE_KEY,
-      "Authorization": `Bearer ${token}`,
-      ...(options.headers || {})
-    };
+    const doFetch = (jwt) => fetch(url,{
+      ...options,
+      headers:{
+        "apikey":C.SUPABASE_KEY,
+        "Authorization":`Bearer ${jwt}`,
+        ...(options.headers || {})
+      }
+    });
 
-    let r = await fetch(url,{...options,headers});
+    let r = await doFetch(token);
 
     if(r.status === 401){
       token = await refreshSession();
-
-      if(!token){
-        clearSession();
-        return {authExpired:true};
-      }
-
-      r = await fetch(url,{
-        ...options,
-        headers:{...headers,"Authorization":`Bearer ${token}`}
-      });
+      if(!token){ clearSession(); return {authExpired:true}; }
+      r = await doFetch(token);
     }
 
     return r;
@@ -101,13 +106,10 @@
 
   async function requireAuth(){
     const token = await validToken();
-
     if(!token){
-      clearSession();
       window.location.replace("index.html");
       return false;
     }
-
     return true;
   }
 

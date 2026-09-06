@@ -1,48 +1,80 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="theme-color" content="#070912"><title>Clientes | AtendeBrasil</title><link rel="stylesheet" href="style.css"></head>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Clientes | AtendeBrasil</title><link rel="stylesheet" href="style.css"></head>
 <body><div class="app">
-<header class="topo"><div class="page-title"><a href="painel.html" class="back">‹</a><div><h1>Clientes</h1><p>Central de relacionamento</p></div></div><div class="logo-box"><img src="https://raw.githubusercontent.com/juniorarlindo329-crypto/AtendeBrasil/refs/heads/main/8e677106-9f51-4466-bee8-7f3edd203f42.png" alt="AtendeBrasil"></div></header>
-<main class="conteudo">
-<section class="cabecalho"><small>GESTÃO DE CLIENTES</small><h2>Sua base de clientes</h2><p>Consulte contatos, acompanhe relacionamentos e mantenha seus clientes organizados.</p></section>
+<header class="topo"><div class="page-title"><a href="painel.html" class="back">‹</a><div><h1>Clientes</h1><p>Central de relacionamento</p></div></div><div class="logo-box"><img src="https://raw.githubusercontent.com/juniorarlindo329-crypto/AtendeBrasil/refs/heads/main/8e677106-9f51-4466-bee8-7f3edd203f42.png"></div></header>
+<main>
+<section class="cabecalho"><small>GESTÃO DE CLIENTES</small><h2>Sua base de clientes</h2><p>Consulte contatos e mantenha seus clientes organizados.</p></section>
 <div id="notice" class="notice hidden"></div>
-<section class="resumo"><div class="resumo-card"><span>TOTAL DE CLIENTES</span><strong id="totalClientes">0</strong><small>Base cadastrada</small></div><div class="resumo-card"><span>NOVOS</span><strong id="novosClientes">0</strong><small>Últimos 7 dias</small></div></section>
-<section class="acoes"><div class="pesquisa">🔎<input id="buscarCliente" type="text" placeholder="Buscar cliente..."></div><button class="novo" id="novoBtn" type="button">+</button></section>
-<div class="titulo-lista"><h3>Clientes</h3><span id="contadorLista">0 cadastrados</span></div><section class="lista" id="listaClientes"></section>
+<section class="resumo"><div class="resumo-card"><span>TOTAL</span><strong id="totalClientes">0</strong><small>Base cadastrada</small></div><div class="resumo-card"><span>NOVOS</span><strong id="novosClientes">0</strong><small>Últimos 7 dias</small></div></section>
+<section class="acoes"><div class="pesquisa">🔎 <input id="buscarCliente" placeholder="Buscar cliente..."></div><button class="novo" id="novoBtn">+</button></section>
+<div class="titulo-lista"><h3>Clientes</h3><span id="contadorLista">0 cadastrados</span></div>
+<section class="lista" id="listaClientes"></section>
 </main>
-<nav class="menu"><a href="painel.html"><b>⌂</b>Início</a><a href="#"><b>💬</b>Atender</a><a href="clientes.html" class="ativo"><b>👥</b>Clientes</a><a href="#" id="sairBtn"><b>🚪</b>Sair</a></nav>
+<nav class="menu"><a href="painel.html"><b>⌂</b>Início</a><a href="#"><b>💬</b>Atender</a><a class="ativo" href="clientes.html"><b>👥</b>Clientes</a><a href="#" id="sairBtn"><b>🚪</b>Sair</a></nav>
 </div>
-<div class="modal" id="modalCliente"><div class="modal-box"><div class="modal-topo"><h3>Novo cliente</h3><button class="fechar" id="fecharBtn" type="button">✕</button></div><div class="campo"><label>Nome do cliente</label><input id="nomeCliente" type="text" placeholder="Nome completo"></div><div class="campo"><label>Telefone / WhatsApp</label><input id="telefoneCliente" type="tel" placeholder="(00) 00000-0000"></div><div class="campo"><label>E-mail</label><input id="emailCliente" type="email" placeholder="cliente@email.com"></div><button class="salvar" id="salvarBtn" type="button">Salvar cliente</button></div></div>
+
+<div class="modal" id="modalCliente"><div class="modal-box">
+<div class="modal-topo"><h3>Novo cliente</h3><button class="fechar" id="fecharBtn">✕</button></div>
+<div class="campo"><label>Nome</label><input id="nomeCliente"></div>
+<div class="campo"><label>Telefone</label><input id="telefoneCliente"></div>
+<div class="campo"><label>E-mail</label><input id="emailCliente" type="email"></div>
+<button class="salvar" id="salvarBtn">Salvar cliente</button>
+</div></div>
+
 <script src="config.js"></script><script src="session.js"></script>
 <script>
-const C=window.ATENDE_CONFIG,S=window.AtendeSession;let clientes=[];
-function aviso(texto,erro=false){const n=document.getElementById("notice");n.textContent=texto;n.classList.remove("hidden");n.style.color=erro?"#ffc4cc":"#cbd0db"}
-function abrirModal(){document.getElementById("modalCliente").classList.add("ativo")}function fecharModal(){document.getElementById("modalCliente").classList.remove("ativo")}
-function escapar(v){return String(v||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
-function whatsapp(t){let n=String(t||"").replace(/\D/g,"");return n.startsWith("55")?n:"55"+n}
-function contarNovos(){const d=new Date();d.setDate(d.getDate()-7);return clientes.filter(c=>c.criado_em&&new Date(c.criado_em)>=d).length}
+const C=window.ATENDE_CONFIG,S=window.AtendeSession;
+let clientes=[];
+
+function abrirModal(){document.getElementById("modalCliente").classList.add("ativo");}
+function fecharModal(){document.getElementById("modalCliente").classList.remove("ativo");}
+function aviso(t){const n=document.getElementById("notice");n.textContent=t;n.classList.remove("hidden");}
+function whatsapp(t){let n=String(t||"").replace(/\D/g,"");return n.startsWith("55")?n:"55"+n;}
+
 function renderizar(filtro=""){
-  const lista=document.getElementById("listaClientes"),texto=filtro.toLowerCase().trim();
-  const resultado=clientes.filter(c=>`${c.nome||""} ${c.telefone||""} ${c.email||""}`.toLowerCase().includes(texto));
-  document.getElementById("totalClientes").textContent=clientes.length;document.getElementById("novosClientes").textContent=contarNovos();document.getElementById("contadorLista").textContent=resultado.length+" cadastrados";lista.innerHTML="";
-  if(!resultado.length){lista.innerHTML='<div class="vazio"><div>👥</div><strong>Nenhum cliente encontrado</strong><p>Toque no botão + para cadastrar seu primeiro cliente.</p></div>';return}
-  resultado.forEach(c=>{const card=document.createElement("div");card.className="cliente";const nome=escapar(c.nome),tel=escapar(c.telefone),email=escapar(c.email||"Sem e-mail cadastrado");card.innerHTML=`<div class="avatar">${nome.charAt(0).toUpperCase()}</div><div class="cliente-info"><strong>${nome}</strong><p>${tel}</p><small>${email}</small></div><a class="whatsapp" href="https://wa.me/${whatsapp(c.telefone)}" target="_blank" rel="noopener noreferrer">💬</a>`;lista.appendChild(card)})
+  const lista=document.getElementById("listaClientes");
+  const txt=filtro.toLowerCase().trim();
+  const resultado=clientes.filter(c=>`${c.nome||""} ${c.telefone||""} ${c.email||""}`.toLowerCase().includes(txt));
+  document.getElementById("totalClientes").textContent=clientes.length;
+  const sete=new Date();sete.setDate(sete.getDate()-7);
+  document.getElementById("novosClientes").textContent=clientes.filter(c=>c.criado_em&&new Date(c.criado_em)>=sete).length;
+  document.getElementById("contadorLista").textContent=resultado.length+" cadastrados";
+  lista.innerHTML="";
+  if(!resultado.length){lista.innerHTML='<div class="vazio">👥<p>Nenhum cliente encontrado.</p></div>';return;}
+  resultado.forEach(c=>{
+    const card=document.createElement("div");
+    card.className="cliente";
+    card.innerHTML=`<div class="avatar">${(c.nome||"?").charAt(0).toUpperCase()}</div><div class="cliente-info"><strong>${c.nome||""}</strong><p>${c.telefone||""}</p><small>${c.email||"Sem e-mail"}</small></div><a class="whatsapp" target="_blank" href="https://wa.me/${whatsapp(c.telefone)}">💬</a>`;
+    lista.appendChild(card);
+  });
 }
+
 async function carregar(){
   const r=await S.authFetch(`${C.SUPABASE_URL}/rest/v1/clientes?select=*&order=criado_em.desc`,{method:"GET"});
-  if(r?.authExpired){window.location.replace("index.html");return}
-  if(!r.ok){const txt=await r.text();console.error(txt);aviso("Não foi possível carregar os clientes. Verifique a tabela e as políticas RLS do Supabase.",true);return}
-  clientes=await r.json();renderizar()
+  if(r?.authExpired){window.location.replace("index.html");return;}
+  if(!r.ok){aviso("Não foi possível carregar os clientes.");return;}
+  clientes=await r.json();renderizar();
 }
+
 async function salvar(){
-  const nome=document.getElementById("nomeCliente").value.trim(),telefone=document.getElementById("telefoneCliente").value.trim(),email=document.getElementById("emailCliente").value.trim();
-  if(!nome||!telefone){alert("Informe o nome e o telefone do cliente.");return}
-  const btn=document.getElementById("salvarBtn");btn.disabled=true;btn.textContent="Salvando...";
-  const r=await S.authFetch(`${C.SUPABASE_URL}/rest/v1/clientes`,{method:"POST",headers:{"Content-Type":"application/json","Prefer":"return=representation"},body:JSON.stringify({nome,telefone,email:email||null})});
-  btn.disabled=false;btn.textContent="Salvar cliente";
-  if(r?.authExpired){window.location.replace("index.html");return}
-  if(!r.ok){const txt=await r.text();console.error(txt);alert("Não foi possível salvar o cliente. Confira o Supabase.");return}
-  document.getElementById("nomeCliente").value="";document.getElementById("telefoneCliente").value="";document.getElementById("emailCliente").value="";fecharModal();await carregar();alert("Cliente cadastrado com sucesso!")
+  const nome=document.getElementById("nomeCliente").value.trim();
+  const telefone=document.getElementById("telefoneCliente").value.trim();
+  const email=document.getElementById("emailCliente").value.trim();
+  if(!nome||!telefone){alert("Informe nome e telefone.");return;}
+  const r=await S.authFetch(`${C.SUPABASE_URL}/rest/v1/clientes`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json","Prefer":"return=representation"},
+    body:JSON.stringify({nome,telefone,email:email||null})
+  });
+  if(r?.authExpired){window.location.replace("index.html");return;}
+  if(!r.ok){alert("Não foi possível salvar o cliente.");return;}
+  fecharModal();await carregar();alert("Cliente cadastrado com sucesso!");
 }
-document.getElementById("novoBtn").addEventListener("click",abrirModal);document.getElementById("fecharBtn").addEventListener("click",fecharModal);document.getElementById("salvarBtn").addEventListener("click",salvar);document.getElementById("buscarCliente").addEventListener("input",e=>renderizar(e.target.value));document.getElementById("sairBtn").addEventListener("click",e=>{e.preventDefault();S.clearSession();window.location.replace("index.html")});
-(async()=>{if(!(await S.requireAuth()))return;await carregar()})();
+
+document.getElementById("novoBtn").addEventListener("click",abrirModal);
+document.getElementById("fecharBtn").addEventListener("click",fecharModal);
+document.getElementById("salvarBtn").addEventListener("click",salvar);
+document.getElementById("buscarCliente").addEventListener("input",e=>renderizar(e.target.value));
+document.getElementById("sairBtn").addEventListener("click",e=>{e.preventDefault();S.clearSession();window.location.replace("index.html");});
+(async()=>{if(!(await S.requireAuth()))return;await carregar();})();
 </script></body></html>

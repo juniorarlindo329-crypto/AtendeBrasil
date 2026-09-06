@@ -1,32 +1,30 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="theme-color" content="#070912"><title>Painel | AtendeBrasil</title><link rel="stylesheet" href="style.css"></head>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Painel | AtendeBrasil</title><link rel="stylesheet" href="style.css"></head>
 <body><div class="app">
-<header class="topo"><div class="marca"><h1>Atende<span>Brasil</span></h1><p>Inteligência que atende por você.</p></div><div class="perfil"><img src="https://raw.githubusercontent.com/juniorarlindo329-crypto/AtendeBrasil/refs/heads/main/8e677106-9f51-4466-bee8-7f3edd203f42.png" alt="AtendeBrasil"></div></header>
-<main class="conteudo">
-<section class="saudacao"><small>PAINEL DA EMPRESA</small><h2 id="ola">Olá 👋</h2><p>Gerencie seus clientes e prepare sua operação para o atendimento inteligente.</p></section>
-<section class="status-principal"><div class="status-topo"><span class="status-label">STATUS DO SISTEMA</span><span class="badge">● Online</span></div><h3>Seu painel está pronto</h3><p>Conta conectada com segurança ao Supabase.</p></section>
+<header class="topo"><div class="marca"><h1>Atende<span>Brasil</span></h1><p>Inteligência que atende por você.</p></div><div class="perfil"><img src="https://raw.githubusercontent.com/juniorarlindo329-crypto/AtendeBrasil/refs/heads/main/8e677106-9f51-4466-bee8-7f3edd203f42.png"></div></header>
+<main>
+<section class="saudacao"><small>PAINEL DA EMPRESA</small><h2 id="ola">Olá 👋</h2><p>Gerencie seus clientes e prepare sua operação para a IA.</p></section>
+<section class="status-principal"><span class="badge">● Online</span><h3>Seu painel está pronto</h3><p>Sessão verificada diretamente no Supabase.</p></section>
 <section class="resumo"><div class="mini-card"><span>CLIENTES</span><strong id="totalClientesPainel">—</strong><small>Base cadastrada</small></div><div class="mini-card"><span>ATENDIMENTOS</span><strong>0</strong><small>Em breve</small></div></section>
-<div class="titulo-secao"><h3>Gerenciar</h3><span>Atalhos</span></div>
 <section class="atalhos">
-<a class="card" href="clientes.html"><div class="icone">👥</div><div><strong>Clientes</strong><p>Cadastre e consulte sua base de clientes.</p></div></a>
-<a class="card" href="#"><div class="icone">💬</div><div><strong>Atendimentos</strong><p>Área de conversas da IA — próxima etapa.</p></div></a>
-<a class="card" href="#"><div class="icone">🤖</div><div><strong>Minha IA</strong><p>Configuração do atendimento automático.</p></div></a>
-<a class="card" href="#"><div class="icone">📊</div><div><strong>Relatórios</strong><p>Acompanhe resultados e desempenho.</p></div></a>
-<a class="card" href="#"><div class="icone">📱</div><div><strong>WhatsApp</strong><p>Conexão oficial será adicionada no backend.</p></div></a>
-<a class="card" href="#"><div class="icone">⚙️</div><div><strong>Configurações</strong><p>Dados da empresa e preferências.</p></div></a>
-</section></main>
-<nav class="menu"><a href="painel.html" class="ativo"><b>⌂</b>Início</a><a href="#"><b>💬</b>Atender</a><a href="clientes.html"><b>👥</b>Clientes</a><a href="#" id="sairBtn"><b>🚪</b>Sair</a></nav>
+<a class="card" href="clientes.html"><div class="icone">👥</div><strong>Clientes</strong><p>Cadastre e consulte sua base.</p></a>
+<a class="card" href="#"><div class="icone">💬</div><strong>Atendimentos</strong><p>Área de conversas.</p></a>
+<a class="card" href="#"><div class="icone">🤖</div><strong>Minha IA</strong><p>Configuração da IA.</p></a>
+<a class="card" href="#"><div class="icone">📊</div><strong>Relatórios</strong><p>Resultados e desempenho.</p></a>
+</section>
+</main>
+<nav class="menu"><a class="ativo" href="painel.html"><b>⌂</b>Início</a><a href="#"><b>💬</b>Atender</a><a href="clientes.html"><b>👥</b>Clientes</a><a href="#" id="sairBtn"><b>🚪</b>Sair</a></nav>
 </div>
 <script src="config.js"></script><script src="session.js"></script>
 <script>
 (async()=>{
   const S=window.AtendeSession,C=window.ATENDE_CONFIG;
-  if(!(await S.requireAuth()))return;
+  if(!(await S.requireAuth())) return;
   const user=S.getUser();
-  if(user?.email)document.getElementById("ola").textContent="Olá, "+user.email.split("@")[0]+" 👋";
+  if(user?.email) document.getElementById("ola").textContent="Olá, "+user.email.split("@")[0]+" 👋";
   const r=await S.authFetch(`${C.SUPABASE_URL}/rest/v1/clientes?select=id`,{method:"GET"});
-  if(r?.authExpired){window.location.replace("index.html");return}
-  if(r?.ok){const data=await r.json();document.getElementById("totalClientesPainel").textContent=data.length}
-  document.getElementById("sairBtn").addEventListener("click",e=>{e.preventDefault();S.clearSession();window.location.replace("index.html")});
+  if(r?.authExpired){window.location.replace("index.html");return;}
+  if(r?.ok){const data=await r.json();document.getElementById("totalClientesPainel").textContent=data.length;}
+  document.getElementById("sairBtn").addEventListener("click",e=>{e.preventDefault();S.clearSession();window.location.replace("index.html");});
 })();
 </script></body></html>
