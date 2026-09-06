@@ -622,8 +622,10 @@ async function carregarClientes() {
     );
 
     if (resposta.status === 401) {
-      sair();
-      return;
+  const erro401 = await resposta.text();
+  console.error("Erro 401 Supabase:", erro401);
+  alert("ERRO 401: a sessão foi recusada pelo Supabase.");
+  return;
     }
 
     if (!resposta.ok) {
